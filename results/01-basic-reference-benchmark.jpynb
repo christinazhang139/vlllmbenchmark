@@ -1,0 +1,143 @@
+{
+  "experiment_info": {
+    "timestamp": "2025-07-09T20:57:24.969851",
+    "experiment_name": "vLLM Basic Inference Performance Test",
+    "description": "Comprehensive test of vLLM inference performance and resource usage"
+  },
+  "system_info": {
+    "gpu_memory_allocated": 0.0,
+    "gpu_memory_total": 23.6212158203125,
+    "gpu_name": "NVIDIA GeForce RTX 4090",
+    "system_memory_used": 8.932151794433594,
+    "system_memory_total": 124.90262603759766,
+    "system_memory_percent": 8.2
+  },
+  "performance_metrics": {
+    "model_loading": {
+      "model_name": "facebook/opt-125m",
+      "load_time_seconds": 27.00704026222229,
+      "memory_used_gb": 0.0,
+      "pre_load_gpu_memory_gb": 0.0,
+      "post_load_gpu_memory_gb": 0.0
+    },
+    "inference": {
+      "total_time_seconds": 0.08905982971191406,
+      "throughput_requests_per_second": 56.14203413787934,
+      "average_latency_seconds": 0.017811965942382813,
+      "total_requests": 5,
+      "batch_processing": true
+    },
+    "statistics": {
+      "total_tokens_generated": 250,
+      "average_tokens_per_output": 50.0,
+      "tokens_per_second": 2807.101706893967,
+      "min_tokens_per_output": 50,
+      "max_tokens_per_output": 50,
+      "memory_efficiency_gb_per_billion_params": 0.0,
+      "gpu_utilization_percent": 0.0
+    }
+  },
+  "test_results": [
+    {
+      "test_id": 1,
+      "category": "basic_completion",
+      "type": "简单续写",
+      "prompt": "Hello, my name is",
+      "generated_text": "Joel, my dad is my friend and we are in a relationship. I am from Gaviota, Greece and I am doing a video interview with a Greek TV show and you can watch this video about the relationship between me and my dad. I",
+      "token_count": 50,
+      "full_output": "Hello, my name isJoel, my dad is my friend and we are in a relationship. I am from Gaviota, Greece and I am doing a video interview with a Greek TV show and you can watch this video about the relationship between me and my dad. I",
+      "purpose": "测试基本的文本补全能力"
+    },
+    {
+      "test_id": 2,
+      "category": "descriptive",
+      "type": "描述性文本",
+      "prompt": "The weather today is",
+      "generated_text": "awful, although it's been a while since I've been here. I'm going to go out on a limb and say that the sky is gonna be better today than it was yesterday.\nSee that's what makes it not rain too much but",
+      "token_count": 50,
+      "full_output": "The weather today isawful, although it's been a while since I've been here. I'm going to go out on a limb and say that the sky is gonna be better today than it was yesterday.\nSee that's what makes it not rain too much but",
+      "purpose": "测试描述性文本生成能力"
+    },
+    {
+      "test_id": 3,
+      "category": "conceptual",
+      "type": "概念解释",
+      "prompt": "Artificial intelligence is",
+      "generated_text": "all around you.\nyes but you cant imagine how far your imagination goes\nAs well as the creepy stuff on the walls and all the creepy people you see.\nSo like maybe a world of art where people do things like this, where the",
+      "token_count": 50,
+      "full_output": "Artificial intelligence isall around you.\nyes but you cant imagine how far your imagination goes\nAs well as the creepy stuff on the walls and all the creepy people you see.\nSo like maybe a world of art where people do things like this, where the",
+      "purpose": "测试概念性知识表达能力"
+    },
+    {
+      "test_id": 4,
+      "category": "predictive",
+      "type": "预测推理",
+      "prompt": "In the future, technology will",
+      "generated_text": "be able to detect diabetics and other conditions that cause them to experience severe heart failure and, ultimately, stroke and heart attack. This is precisely what this system is designed to do. It will distinguish between cardiac abnormal and non-cystic hyper",
+      "token_count": 50,
+      "full_output": "In the future, technology willbe able to detect diabetics and other conditions that cause them to experience severe heart failure and, ultimately, stroke and heart attack. This is precisely what this system is designed to do. It will distinguish between cardiac abnormal and non-cystic hyper",
+      "purpose": "测试逻辑推理和预测能力"
+    },
+    {
+      "test_id": 5,
+      "category": "instructional",
+      "type": "建议指导",
+      "prompt": "The best way to learn programming is",
+      "generated_text": "to learn English.\nThe best way to learn programming is to learn English.\nThe best way to learn programming is to learn English.\nThe best way to learn programming is to learn English.\nThe best way to learn programming is to learn",
+      "token_count": 50,
+      "full_output": "The best way to learn programming isto learn English.\nThe best way to learn programming is to learn English.\nThe best way to learn programming is to learn English.\nThe best way to learn programming is to learn English.\nThe best way to learn programming is to learn",
+      "purpose": "测试建议和指导内容生成能力"
+    }
+  ],
+  "parameters": {
+    "temperature": 0.8,
+    "top_p": 0.95,
+    "max_tokens": 50
+  },
+  "test_cases": [
+    {
+      "prompt": "Hello, my name is",
+      "type": "简单续写",
+      "category": "basic_completion",
+      "purpose": "测试基本的文本补全能力"
+    },
+    {
+      "prompt": "The weather today is",
+      "type": "描述性文本",
+      "category": "descriptive",
+      "purpose": "测试描述性文本生成能力"
+    },
+    {
+      "prompt": "Artificial intelligence is",
+      "type": "概念解释",
+      "category": "conceptual",
+      "purpose": "测试概念性知识表达能力"
+    },
+    {
+      "prompt": "In the future, technology will",
+      "type": "预测推理",
+      "category": "predictive",
+      "purpose": "测试逻辑推理和预测能力"
+    },
+    {
+      "prompt": "The best way to learn programming is",
+      "type": "建议指导",
+      "category": "instructional",
+      "purpose": "测试建议和指导内容生成能力"
+    }
+  ],
+  "benchmark_summary": {
+    "framework": "vLLM",
+    "model": "facebook/opt-125m",
+    "model_size": "125M parameters",
+    "hardware": "NVIDIA GeForce RTX 4090",
+    "gpu_memory_total": 23.6212158203125,
+    "key_metrics": {
+      "load_time_seconds": 27.00704026222229,
+      "throughput_req_per_sec": 56.14203413787934,
+      "token_generation_rate_per_sec": 2807.101706893967,
+      "memory_usage_gb": 0.0,
+      "memory_efficiency_gb_per_billion_params": 0.0
+    }
+  }
+}
