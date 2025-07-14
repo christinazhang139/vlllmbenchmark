@@ -125,7 +125,7 @@
 
 ## 实验输出结果可以在下面的地址找到
 
-results/01-basic-reference-benchmark.jpynb
+[results/01-basic-reference-benchmark.jpynb](https://github.com/christinazhang139/vlllmbenchmark/blob/main/results/01-basic-reference-benchmark.jpynb)
 
 ---
 
