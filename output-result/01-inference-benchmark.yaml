@@ -1,0 +1,236 @@
+INFO 07-09 20:57:23 [__init__.py:244] Automatically detected platform cuda.
+======================================================================
+vLLM基础推理性能实验
+======================================================================
+🎯 目标：测试vLLM的推理性能、内存使用和批处理效率
+📊 输出：完整的性能分析报告和JSON数据文件
+
+
+📊 实验开始前的系统状态:
+   GPU: NVIDIA GeForce RTX 4090
+   GPU内存: 0.0GB / 23.6GB
+   系统内存: 8.9GB / 124.9GB (8.2%)
+
+======================================================================
+第1步：配置推理参数
+======================================================================
+📋 推理参数配置：
+   • temperature = 0.8
+     作用：控制输出的随机性，0=确定性，1=高随机性
+   • top_p = 0.95
+     作用：只考虑概率累计到95%的词汇，提高输出质量
+   • max_tokens = 50
+     作用：限制输出长度，便于性能测试和结果分析
+✅ 参数配置完成
+
+======================================================================
+第2步：加载模型
+======================================================================
+📦 选择模型：facebook/opt-125m
+🔍 模型特点：
+   • 参数量：125,000,000 (1.25亿)
+   • 模型类型：因果语言模型
+   • 开发者：Meta (Facebook)
+   • 优势：体积小，加载快，适合性能基准测试
+
+⏱️  开始加载模型...
+INFO 07-09 20:57:29 [config.py:841] This model supports multiple tasks: {'classify', 'embed', 'reward', 'generate'}. Defaulting to 'generate'.
+INFO 07-09 20:57:29 [config.py:1472] Using max model len 2048
+INFO 07-09 20:57:29 [config.py:2285] Chunked prefill is enabled with max_num_batched_tokens=8192.
+WARNING 07-09 20:57:29 [__init__.py:2662] We must use the `spawn` multiprocessing start method. Overriding VLLM_WORKER_MULTIPROC_METHOD to 'spawn'. See https://docs.vllm.ai/en/latest/usage/troubleshooting.html#python-multiprocessing for more information. Reason: CUDA is initialized
+INFO 07-09 20:57:31 [__init__.py:244] Automatically detected platform cuda.
+INFO 07-09 20:57:33 [core.py:526] Waiting for init message from front-end.
+INFO 07-09 20:57:33 [core.py:69] Initializing a V1 LLM engine (v0.9.2) with config: model='facebook/opt-125m', speculative_config=None, tokenizer='facebook/opt-125m', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, override_neuron_config={}, tokenizer_revision=None, trust_remote_code=False, dtype=torch.float16, max_seq_len=2048, download_dir=None, load_format=LoadFormat.AUTO, tensor_parallel_size=1, pipeline_parallel_size=1, disable_custom_all_reduce=False, quantization=None, enforce_eager=False, kv_cache_dtype=auto,  device_config=cuda, decoding_config=DecodingConfig(backend='auto', disable_fallback=False, disable_any_whitespace=False, disable_additional_properties=False, reasoning_backend=''), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None), seed=0, served_model_name=facebook/opt-125m, num_scheduler_steps=1, multi_step_stream_outputs=True, enable_prefix_caching=True, chunked_prefill_enabled=True, use_async_output_proc=True, pooler_config=None, compilation_config={"level":3,"debug_dump_path":"","cache_dir":"","backend":"","custom_ops":[],"splitting_ops":["vllm.unified_attention","vllm.unified_attention_with_output"],"use_inductor":true,"compile_sizes":[],"inductor_compile_config":{"enable_auto_functionalized_v2":false},"inductor_passes":{},"use_cudagraph":true,"cudagraph_num_of_warmups":1,"cudagraph_capture_sizes":[512,504,496,488,480,472,464,456,448,440,432,424,416,408,400,392,384,376,368,360,352,344,336,328,320,312,304,296,288,280,272,264,256,248,240,232,224,216,208,200,192,184,176,168,160,152,144,136,128,120,112,104,96,88,80,72,64,56,48,40,32,24,16,8,4,2,1],"cudagraph_copy_inputs":false,"full_cuda_graph":false,"max_capture_size":512,"local_cache_dir":null}
+INFO 07-09 20:57:33 [parallel_state.py:1076] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, TP rank 0, EP rank 0
+WARNING 07-09 20:57:33 [topk_topp_sampler.py:59] FlashInfer is not available. Falling back to the PyTorch-native implementation of top-p & top-k sampling. For the best performance, please install FlashInfer.
+INFO 07-09 20:57:33 [gpu_model_runner.py:1770] Starting to load model facebook/opt-125m...
+INFO 07-09 20:57:33 [gpu_model_runner.py:1775] Loading model from scratch...
+INFO 07-09 20:57:33 [cuda.py:284] Using Flash Attention backend on V1 engine.
+INFO 07-09 20:57:34 [weight_utils.py:292] Using model weights format ['*.bin']
+Loading pt checkpoint shards:   0% Completed | 0/1 [00:00<?, ?it/s]
+Loading pt checkpoint shards: 100% Completed | 1/1 [00:00<00:00,  8.28it/s]
+Loading pt checkpoint shards: 100% Completed | 1/1 [00:00<00:00,  8.27it/s]
+
+INFO 07-09 20:57:34 [default_loader.py:272] Loading weights took 0.12 seconds
+INFO 07-09 20:57:34 [gpu_model_runner.py:1801] Model loading took 0.2389 GiB and 0.507100 seconds
+INFO 07-09 20:57:35 [backends.py:508] Using cache directory: /home/christina/.cache/vllm/torch_compile_cache/6c826f9453/rank_0_0/backbone for vLLM's torch.compile
+INFO 07-09 20:57:35 [backends.py:519] Dynamo bytecode transform time: 0.93 s
+INFO 07-09 20:57:36 [backends.py:155] Directly load the compiled graph(s) for shape None from the cache, took 0.456 s
+INFO 07-09 20:57:36 [monitor.py:34] torch.compile takes 0.93 s in total
+INFO 07-09 20:57:37 [gpu_worker.py:232] Available KV cache memory: 20.47 GiB
+INFO 07-09 20:57:37 [kv_cache_utils.py:716] GPU KV cache size: 596,096 tokens
+INFO 07-09 20:57:37 [kv_cache_utils.py:720] Maximum concurrency for 2,048 tokens per request: 291.06x
+Capturing CUDA graph shapes: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 67/67 [00:14<00:00,  4.72it/s]
+INFO 07-09 20:57:51 [gpu_model_runner.py:2326] Graph capturing finished in 14 secs, took 0.21 GiB
+INFO 07-09 20:57:51 [core.py:172] init engine (profile, create kv cache, warmup model) took 16.82 seconds
+✅ 模型加载完成
+   ⏱️  加载时间：27.01秒
+   💾 GPU内存占用：0.0GB
+   📊 GPU内存利用率：0.0%
+
+📊 模型加载后的系统状态:
+   GPU: NVIDIA GeForce RTX 4090
+   GPU内存: 0.0GB / 23.6GB
+   系统内存: 10.2GB / 124.9GB (9.2%)
+
+======================================================================
+第3步：准备测试数据
+======================================================================
+📝 测试用例设计：
+   设计原则：覆盖AI应用的主要使用场景
+   1. 简单续写："Hello, my name is"
+      目的：测试基本的文本补全能力
+      分类：basic_completion
+   2. 描述性文本："The weather today is"
+      目的：测试描述性文本生成能力
+      分类：descriptive
+   3. 概念解释："Artificial intelligence is"
+      目的：测试概念性知识表达能力
+      分类：conceptual
+   4. 预测推理："In the future, technology will"
+      目的：测试逻辑推理和预测能力
+      分类：predictive
+   5. 建议指导："The best way to learn programming is"
+      目的：测试建议和指导内容生成能力
+      分类：instructional
+
+✅ 测试数据准备完成，共 5 个测试用例
+
+======================================================================
+第4步：执行推理测试
+======================================================================
+🚀 开始批量推理...
+💡 特色：vLLM使用批处理技术同时处理多个请求
+📊 测试：将同时处理所有测试用例，测量整体性能
+Adding requests: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 5/5 [00:00<00:00, 2418.58it/s]
+Processed prompts: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 5/5 [00:00<00:00, 58.26it/s, est. speed input: 361.64 toks/s, output: 2916.32 toks/s]
+✅ 推理完成
+   ⏱️  推理总时间：0.09秒
+   📈 处理速度：56.14 请求/秒
+   ⚡ 平均延迟：0.02秒/请求
+
+======================================================================
+第5步：详细结果分析
+======================================================================
+📋 逐个测试用例的详细结果：
+================================================================================
+
+测试用例 1：简单续写 (basic_completion)
+输入提示："Hello, my name is"
+生成文本："Joel, my dad is my friend and we are in a relationship. I am from Gaviota, Greece and I am doing a video interview with a Greek TV show and you can watch this video about the relationship between me and my dad. I"
+Token数量：50
+完整输出："Hello, my name isJoel, my dad is my friend and we are in a relationship. I am from Gaviota, Greece and I am doing a video interview with a Greek TV show and you can watch this video about the relationship between me and my dad. I"
+------------------------------------------------------------
+
+测试用例 2：描述性文本 (descriptive)
+输入提示："The weather today is"
+生成文本："awful, although it's been a while since I've been here. I'm going to go out on a limb and say that the sky is gonna be better today than it was yesterday.
+See that's what makes it not rain too much but"
+Token数量：50
+完整输出："The weather today isawful, although it's been a while since I've been here. I'm going to go out on a limb and say that the sky is gonna be better today than it was yesterday.
+See that's what makes it not rain too much but"
+------------------------------------------------------------
+
+测试用例 3：概念解释 (conceptual)
+输入提示："Artificial intelligence is"
+生成文本："all around you.
+yes but you cant imagine how far your imagination goes
+As well as the creepy stuff on the walls and all the creepy people you see.
+So like maybe a world of art where people do things like this, where the"
+Token数量：50
+完整输出："Artificial intelligence isall around you.
+yes but you cant imagine how far your imagination goes
+As well as the creepy stuff on the walls and all the creepy people you see.
+So like maybe a world of art where people do things like this, where the"
+------------------------------------------------------------
+
+测试用例 4：预测推理 (predictive)
+输入提示："In the future, technology will"
+生成文本："be able to detect diabetics and other conditions that cause them to experience severe heart failure and, ultimately, stroke and heart attack. This is precisely what this system is designed to do. It will distinguish between cardiac abnormal and non-cystic hyper"
+Token数量：50
+完整输出："In the future, technology willbe able to detect diabetics and other conditions that cause them to experience severe heart failure and, ultimately, stroke and heart attack. This is precisely what this system is designed to do. It will distinguish between cardiac abnormal and non-cystic hyper"
+------------------------------------------------------------
+
+测试用例 5：建议指导 (instructional)
+输入提示："The best way to learn programming is"
+生成文本："to learn English.
+The best way to learn programming is to learn English.
+The best way to learn programming is to learn English.
+The best way to learn programming is to learn English.
+The best way to learn programming is to learn"
+Token数量：50
+完整输出："The best way to learn programming isto learn English.
+The best way to learn programming is to learn English.
+The best way to learn programming is to learn English.
+The best way to learn programming is to learn English.
+The best way to learn programming is to learn"
+------------------------------------------------------------
+
+======================================================================
+第6步：性能统计和分析
+======================================================================
+📊 关键性能指标 (KPI)：
+   🏃 模型加载时间：27.01秒
+   ⚡ 推理总时间：0.09秒
+   📈 吞吐量：56.14 请求/秒
+   🎯 平均延迟：0.02秒/请求
+   📝 Token统计：
+      • 总Token数：250
+      • 平均Token数：50.0
+      • Token范围：50 ~ 50
+   🚀 Token生成速度：2807.1 tokens/秒
+   💾 内存使用：0.0GB GPU内存
+
+📈 效率分析：
+   💡 内存效率：0.0GB/B参数
+   📊 GPU利用率：0.0%
+   ⚖️  批处理优势：同时处理5个请求
+
+======================================================================
+第7步：基准数据总结
+======================================================================
+🏆 vLLM性能基准数据：
+   框架版本：vLLM (当前安装版本)
+   测试模型：facebook/opt-125m (125M参数)
+   硬件平台：NVIDIA GeForce RTX 4090
+   GPU内存：24GB
+   
+   📊 关键指标：
+      • 模型加载：27.01秒
+      • 推理吞吐：56.14 req/s
+      • Token速率：2807.1 tok/s
+      • 内存占用：0.0GB
+      • 内存效率：0.0GB/B参数
+
+======================================================================
+第8步：保存实验结果
+======================================================================
+💾 实验结果已保存：vllm_basic_experiment_20250709_205752.json
+📊 数据包含：
+   • 完整的系统信息
+   • 详细的性能指标
+   • 所有测试用例的结果
+   • 基准数据总结
+
+======================================================================
+🎯 实验完成总结
+======================================================================
+✅ 实验成功完成！
+💡 主要发现：
+   1. vLLM加载125M模型耗时 27.0秒，内存占用 0.0GB
+   2. 批处理推理速度达到 56.1 请求/秒
+   3. Token生成速度为 2807 tokens/秒
+   4. GPU内存利用率为 0.0%
+   5. 所有测试用例都成功生成了合理的文本输出
+
+📋 数据用途：
+   • 可作为vLLM性能基准参考
+   • 可用于不同配置的性能对比
+   • 可用于硬件升级效果评估
+   • 可用于与其他推理框架的对比分析
+
+🚀 后续建议：
+   • 尝试更大的模型测试性能扩展性
+   • 测试不同批处理大小的性能差异
+   • 比较不同推理参数的效果
+   • 在相同条件下测试其他推理框架
